@@ -31,7 +31,7 @@ class DataProcessing():
         csv_names = self.__find_csvs()
         for csv_name in csv_names:
             csv_data = self.__process_csv(csv_name)
-            data_name = csv_name.split('/')[-1].replace('.csv', '')
+            data_name = csv_name.split('\\')[-1].replace('.csv', '')
             all_data[data_name] = csv_data
         return all_data
 
@@ -50,6 +50,8 @@ class DataProcessing():
 
 
 if __name__ == '__main__':
-    data_directory = '/data'
+    data_directory = 'data'
     processor = DataProcessing(data_directory)
-    data = DataProcessing.process()
+    data = processor.process()
+    print(data)
+    

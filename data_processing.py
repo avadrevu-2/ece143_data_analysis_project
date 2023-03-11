@@ -45,8 +45,7 @@ class DataProcessing():
         """
         Uses Pandas read_csv method to load the data into a dataframe
         """
-        data = pd.read_csv(filepath)
-        return data
+        return pd.read_csv(filepath)
 
 
 if __name__ == '__main__':

@@ -1,57 +1,76 @@
-import glob
-import os
 import pandas as pd
+import logging
+from read_data import ReadData
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
-class DataProcessing():
-    """
-    A class for dataprocessing CSV files in a directory.
-
-    Attributes
-    ----------
-    data_directory: str
-        The filepath of the data directory
-
-    Public Methods
-    ----------
-    process():
-        Returns a dictionary, key is the name of the dataset
-        value is the DataFrame for that dataset
-
-    """
+class ProcessData():
     def __init__(self, data_directory: str) -> None:
-        self.data_dir = data_directory
-    
+        self.data_directory = data_directory
+        self.data = {}
+        self.processed = {}
+        """
+        
+        """
+        self.layoff_functions = [self.__industry_layoffs, self.__country_layoffs]
+        self.salary_functions = []
+        logger.debug(f'Initialized ProcessData with data directory: {self.data_directory}')
+
     def process(self) -> dict:
         """
-        Finds all CSVs in the data directory, processes them into
-        DataFrames, and returns a dictionary w/ all of them.
+        Process the data and return a dictionary of processed data
         """
-        all_data = {}
-        csv_names = self.__find_csvs()
-        for csv_name in csv_names:
-            csv_data = self.__process_csv(csv_name)
-            data_name = csv_name.split('\\')[-1].replace('.csv', '')
-            all_data[data_name] = csv_data
-        return all_data
+        data_reader = ReadData(self.data_directory)
+        self.data = data_reader.process()
+        for data in self.data:
+            if data == 'layoffs':
+                self.processed['layoff_processed'] = self.__process_layoffs(self.data[data])
+            elif data == 'Levels_Fyi_Salary_Data':
+                self.processed['salary_processed'] = self.__process_salary(self.data[data])
+        return self.processed
 
-    def __find_csvs(self) -> list:
+    def __process_layoffs(self, data: pd.DataFrame) -> dict:
         """
-        Uses glob module to recursively find all .csv files in the directory
+        Call all the functions in self.layoff_functions and return a dictionary of results
         """
-        return glob.glob(os.path.join(self.data_dir, '*.csv'), recursive=True)
-            
-    def __process_csv(self, filepath: str) -> pd.DataFrame:
+        logger.debug('Processing layoffs data')
+        results = {}
+        for func in self.layoff_functions:
+            result = func(data)
+            results[func.__name__] = result
+        return results
+        
+    def __process_salary(self, data: pd.DataFrame) -> dict:
         """
-        Uses Pandas read_csv method to load the data into a dataframe
+        Call all the functions in self.salary_functions and return a dictionary of results
         """
-        data = pd.read_csv(filepath)
-        return data
+        logger.debug('Processing salary data')
+        results = {}
+        for func in self.salary_functions:
+            result = func(data)
+            print(result)
+            results[func.__name__] = result
+        return results
+    
+    # Processing Functions
+    @staticmethod
+    def __industry_layoffs(data) -> pd.DataFrame:
+        Industry: pd.DataFrame = data[['industry', 'total_laid_off']]
+        Industry = Industry.groupby('industry').sum().sort_values(by='total_laid_off', ascending=False)[:10]
+        return Industry
+    
+    @staticmethod
+    def __country_layoffs(data) -> pd.DataFrame:
+        Country: pd.DataFrame = data[['country', 'total_laid_off']]
+        Country = Country.groupby('country').sum().sort_values(by='total_laid_off', ascending=False)[:10]
+        return Country
 
 
 if __name__ == '__main__':
     data_directory = 'data'
-    processor = DataProcessing(data_directory)
-    data = processor.process()
+    data_processor = ProcessData(data_directory)
+    data = data_processor.process()
     print(data)
     

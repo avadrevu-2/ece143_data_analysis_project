@@ -12,10 +12,12 @@ class ProcessData():
         self.data = {}
         self.processed = {}
         """
-        
+        ******
+        Add your functions to the lists below
+        ******
         """
-        self.layoff_functions = [self.__industry_layoffs, self.__country_layoffs]
-        self.salary_functions = []
+        self.layoff_functions = [self.__industry_layoffs, self.__country_layoffs, self.__company_layoffs]
+        self.salary_functions = [self.__company_comp_salaries]
         logger.debug(f'Initialized ProcessData with data directory: {self.data_directory}')
 
     def process(self) -> dict:
@@ -27,7 +29,7 @@ class ProcessData():
         for data in self.data:
             if data == 'layoffs':
                 self.processed['layoff_processed'] = self.__process_layoffs(self.data[data])
-            elif data == 'Levels_Fyi_Salary_Data':
+            elif data == 'salaries':
                 self.processed['salary_processed'] = self.__process_salary(self.data[data])
         return self.processed
 
@@ -58,15 +60,26 @@ class ProcessData():
     @staticmethod
     def __industry_layoffs(data) -> pd.DataFrame:
         Industry: pd.DataFrame = data[['industry', 'total_laid_off']]
-        Industry = Industry.groupby('industry').sum().sort_values(by='total_laid_off', ascending=False)[:10]
+        Industry = Industry.groupby('industry').sum().sort_values(by='total_laid_off', ascending=False)
         return Industry
     
     @staticmethod
     def __country_layoffs(data) -> pd.DataFrame:
         Country: pd.DataFrame = data[['country', 'total_laid_off']]
-        Country = Country.groupby('country').sum().sort_values(by='total_laid_off', ascending=False)[:10]
+        Country = Country.groupby('country').sum().sort_values(by='total_laid_off', ascending=False)
         return Country
 
+    @staticmethod
+    def __company_layoffs(data) -> pd.DataFrame:
+        Company: pd.DataFrame = data[['company', 'total_laid_off']]
+        Company = Company.groupby('company').sum().sort_values(by='total_laid_off', ascending=False)
+        return Company
+
+    @staticmethod
+    def __company_comp_salaries(data) -> pd.DataFrame:
+        Company: pd.DataFrame = data[['company', 'totalyearlycompensation']]
+        Salaries = Company.groupby('company').sum().sort_values(by='totalyearlycompensation', ascending=False)
+        return Salaries
 
 if __name__ == '__main__':
     data_directory = 'data'

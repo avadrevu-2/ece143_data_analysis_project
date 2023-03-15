@@ -59,7 +59,7 @@ class ReadData():
 
 
 if __name__ == '__main__':
-    data_directory = 'data'
+    data_directory = 'data/challenger_data'
     processor = ReadData(data_directory)
     data = processor.process()
     print(data)

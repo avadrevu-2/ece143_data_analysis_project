@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from data_processing import DataProcessing
+from data_processing import ProcessData
 
 
 def merge_df_by_dates(df_dict: dict, date_columns: set) -> tuple:

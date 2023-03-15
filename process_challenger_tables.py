@@ -1,5 +1,10 @@
 # This was created as an aid in extracting the tables presented in
 # the Job Cuts reports from https://www.challengergray.com/
+# The randomly formatted table entries are copied from the PDF and pasted
+# into a text file
+# Limitations: Since the only consistent field delimiter is white space,
+# fields filled with empty space in the PDF need to be manually
+# filled in the text file.
 
 import fileinput
 import sys
@@ -62,7 +67,7 @@ def underscore_text_entries(the_file: str) -> None:
         sys.stdout.write(line)
 
 def remove_multiple_space(the_file: str) -> None:
-    '''Operations done inline on text files'''
+    '''Changes done inline on text files'''
     for line in fileinput.input(the_file, inplace=1):
         line=(' '.join(line.split()))
         line=(' '.join([line,'\n']))
@@ -71,22 +76,22 @@ def remove_multiple_space(the_file: str) -> None:
         
 if __name__=="__main__":
     temp_file='challenger.txt'
-
-    # Purpose: we have space separated fields
+    assert os.path.isfile(temp_file),"check the input file"
+    # Purpose of replacements: we have space separated fields
     # with field entries that contain spaces...
     # Need to ensure the only spaces in the text
     # are between fields.
-    replacements = {'9 R':'9_R',    # ..id-19 Recov...
+    replacements = {'9 R':'9_R',    # ex: ..vid-19 Recov...
                     ',':'',
                     }
-    output_file=simpledialog.askstring('Process Challenger Tables', 'Enter file name:')
+    output_file=simpledialog.askstring('Process Challenger Tables', 'Enter file name:\t\t\t')
     if not output_file:
         raise ValueError
     output_file=os.path.join('data/challenger_data',output_file+'.csv')
     substitute_str(temp_file,replacements)
     remove_multiple_space(temp_file)
     underscore_text_entries(temp_file)
-    columns=simpledialog.askinteger('Process Challenger Tables', 'Enter number of columns:')
+    columns=simpledialog.askinteger('Process Challenger Tables', 'Enter number of columns:\t\t\t')
     if not columns:
         raise ValueError
     csv_from_txt(temp_file,output_file,columns)

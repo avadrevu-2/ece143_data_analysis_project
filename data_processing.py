@@ -16,7 +16,7 @@ class ProcessData():
         Add your functions to the lists below
         ******
         """
-        self.layoff_functions = [self.__industry_layoffs, self.__country_layoffs, self.__company_layoffs, self.__company_funding_stage, self.__company_funding_raised]
+        self.layoff_functions = [self.__industry_layoffs, self.__country_layoffs, self.__company_layoffs, self.__company_funding_stage, self.__company_funding_raised, self.__high_per_industry, self.__high_per_country]
         self.salary_functions = [self.__company_comp_salaries]
         logger.debug(f'Initialized ProcessData with data directory: {self.data_directory}')
 
@@ -93,6 +93,19 @@ class ProcessData():
         funds: pd.DataFrame = data[['company', 'stage', 'funds_raised', 'total_laid_off']]
         funds = funds[~funds['stage'].isin(['Post-IPO', 'Acquired', 'Unknown', 'Private Equity', 'Subsidiary'])]
         return funds[['funds_raised', 'total_laid_off']]
+    
+    @staticmethod
+    def __high_per_industry(data) -> pd.DataFrame:
+        per_industry = data.loc[data['percentage_laid_off']>0.2].loc[data['industry']!='Other'].groupby('industry')['company'].count().sort_values(ascending=False)[:10]
+        per_industry = pd.DataFrame(per_industry).rename(columns={'company':'number of companies'})
+        return per_industry
+    
+    @staticmethod
+    def __high_per_country(data) -> pd.DataFrame:
+        per_country = data.loc[data['percentage_laid_off']>0.2].groupby('country')['company'].count().sort_values(ascending=False)[:10]
+        per_country = pd.DataFrame(per_country).rename(columns={'company':'number of companies'})
+        return per_country
+    
 
 if __name__ == '__main__':
     data_directory = 'data'

@@ -37,7 +37,7 @@ class ReadData():
         for csv_name in csv_names:
             try:
                 csv_data = self.__process_csv(csv_name)
-                data_name = csv_name.split('/')[-1].replace('.csv', '')
+                data_name = os.path.split(csv_name)[-1].split('.')[0]
                 all_data[data_name] = csv_data
             except Exception as e:
                 logger.error(f'Error processing {csv_name}: {e}')

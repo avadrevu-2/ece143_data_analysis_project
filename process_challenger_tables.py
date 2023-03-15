@@ -81,7 +81,7 @@ if __name__=="__main__":
                     }
     output_file=simpledialog.askstring('Process Challenger Tables', 'Enter file name:')
     if not output_file:
-        raise FileNotFoundError
+        raise ValueError
     output_file=os.path.join('data/challenger_data',output_file+'.csv')
     substitute_str(temp_file,replacements)
     remove_multiple_space(temp_file)

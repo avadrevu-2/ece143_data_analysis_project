@@ -18,7 +18,14 @@ class ProcessData():
         Add your functions to the lists below
         ******
         """
-        self.layoff_functions = [self.__industry_layoffs, self.__country_layoffs, self.__company_layoffs, self.__company_funding_stage, self.__company_funding_raised, self.__high_per_industry, self.__high_per_country]
+        self.layoff_functions = [self.__industry_layoffs, 
+                                 self.__country_layoffs,
+                                 self.__company_layoffs, 
+                                 self.__company_funding_stage, 
+                                 self.__company_funding_raised, 
+                                 self.__high_per_industry, 
+                                 self.__high_per_country,
+                                 ]
         self.salary_functions = [self.__company_comp_salaries]
         logger.debug(f'Initialized ProcessData with data directory: {self.data_directory}')
 
@@ -70,21 +77,23 @@ class ProcessData():
             except ValueError:
                 logger.debug(f'{column} is not a Year column')
                 input_df = input_df.drop(columns=column)
-        self.__outer_join(input_df=input_df,add_to_df=output_df)
+        self.__outer_join(input_df=input_df,new_df=output_df)
 
-    def __outer_join(self, input_df: pd.DataFrame, add_to_df:str) -> None:
+    def __outer_join(self, input_df: pd.DataFrame, new_df:str) -> None:
         """
-        Outer join on index.
+        Outer join on index to processed dataframes.
         Data values should be able to convert into numbers and
-        the entries in the output dataframe will have type int.
+        the entries in the output dataframe values will have type int.
+        If the dataframe being joined to does not exist, 'right' 
+        dataframe gets added as a new entry.
         """
         try:
-            self.processed[add_to_df] = self.processed[add_to_df].join(input_df,how='outer',rsuffix='_dupl').fillna(0)    
-            self.processed[add_to_df] = self.processed[add_to_df].drop(self.processed[add_to_df].filter(regex='_dupl$').columns, axis=1).astype(int)
-            for column in self.processed[add_to_df].columns:
-                self.processed[add_to_df] = self.processed[add_to_df].rename(columns={column:int(column)})
+            self.processed[new_df] = self.processed[new_df].join(input_df,how='outer',rsuffix='_dupl').fillna(0)    
+            self.processed[new_df] = (self.processed[new_df].drop(self.processed[new_df].filter(regex='_dupl$').columns, axis=1).astype(int))
+            for column in self.processed[new_df].columns:
+                self.processed[new_df] = self.processed[new_df].rename(columns={column:int(column)})
         except KeyError:
-            self.processed[add_to_df] = input_df
+            self.processed[new_df] = input_df
 
     def __process_layoffs(self, data: pd.DataFrame) -> dict:
         """

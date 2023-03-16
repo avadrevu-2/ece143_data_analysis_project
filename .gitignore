@@ -3,3 +3,4 @@ output.*
 file.html
 personal_
 *checkpoint.ipynb
+.gitignore

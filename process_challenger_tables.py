@@ -48,7 +48,7 @@ def underscore_text_entries(the_file: str) -> None:
     '''
     Specific for these tables where any text field is next
     to a numeric field. Underscores are not placed between
-    text or punctuation and numbers.
+    (text or punctuation) and numbers.
     '''
     punct = string.punctuation
     for line in fileinput.input(the_file, inplace=1):

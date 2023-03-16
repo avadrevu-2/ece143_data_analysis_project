@@ -148,8 +148,8 @@ class ProcessData():
         return funds[['funds_raised', 'total_laid_off']]
 
 if __name__ == '__main__':
-    # data_directory = 'data'
-    data_directory = 'data/challenger_data'
+    data_directory = 'data'
+    # data_directory = 'data/challenger_data'
     data_processor = ProcessData(data_directory)
     data = data_processor.process()
     # print(data)

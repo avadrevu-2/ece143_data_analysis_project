@@ -4,9 +4,9 @@ from os import path
 from read_data import ReadData
 
 
-logging.basicConfig(level=logging.ERROR)
+# logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
-
+logging.getLogger().setLevel('INFO')
 
 class ProcessData():
     def __init__(self, data_directory: str) -> None:
@@ -137,6 +137,8 @@ class ProcessData():
     def __company_funding_stage(data) -> pd.DataFrame:
         funds: pd.DataFrame = data[['company', 'stage', 'funds_raised', 'total_laid_off']]
         funds = funds[~funds['stage'].isin(['Post-IPO', 'Acquired', 'Unknown', 'Private Equity', 'Subsidiary'])]
+        # pandas wants .mean(numeric_only=True) for this
+        # are all the values being grouped numeric?
         stage_data = funds.groupby('stage').mean().sort_values(by='total_laid_off', ascending=False)
         stage_data['Funds raised per Layoff'] = stage_data['funds_raised'].div(stage_data['total_laid_off'])
         return stage_data

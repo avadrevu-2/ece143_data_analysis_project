@@ -62,5 +62,5 @@ if __name__ == '__main__':
     data_directory = 'data'
     processor = ReadData(data_directory)
     data = processor.process()
-    # print(data)
+    print(data)
     

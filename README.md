@@ -3,6 +3,9 @@
 ## A look into mass layoffs!
 This is the codebase for the ECE143 Data Analysis project. In this project, we performed analysis on datasets relating to layoffs.
 
+## Third-Party Modules
+We used Pandas to process our data, and Matplotlib and Scipy for plotting. See our requirements.txt file for the full details of all the modules we used, but those three are the main ones. 
+
 ## How to use
 
 ### Create a new python virtual environment:

@@ -25,6 +25,7 @@ class ProcessData():
                                  self.__company_funding_raised, 
                                  self.__high_per_industry, 
                                  self.__high_per_country,
+                                 self.__sector_layoffs,
                                  ]
         self.salary_functions = [self.__company_comp_salaries]
         logger.debug(f'Initialized ProcessData with data directory: {self.data_directory}')

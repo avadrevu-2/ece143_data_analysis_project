@@ -166,8 +166,9 @@ class ProcessData():
     
     @staticmethod
     def __high_per_country(data) -> pd.DataFrame:
-        per_country = data.loc[data['percentage_laid_off']>0.2].groupby('country')['company'].count().sort_values(ascending=False)[:10]
-        per_country = pd.DataFrame(per_country).rename(columns={'company':'number of companies'})
+        per_country = data.loc[data['percentage_laid_off']>0.2].groupby('country')['company'].count().sort_values(ascending=False)
+        per_country = pd.concat([per_country[:5], pd.Series({'Other Countries' : per_country[5:].sum()})])
+        per_country = pd.DataFrame(per_country).rename(columns={0:'number of companies'})
         return per_country
     
 

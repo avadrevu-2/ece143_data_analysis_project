@@ -52,7 +52,7 @@ def currency_mil(x, pos):
 
 
 # Funds raised per Layoff by Stage
-fig, ax = plt.subplots(figsize=(10, 5))
+fig, ax = plt.subplots(figsize=(10, 5),constrained_layout=True)
 plt.bar(funding_data.index, funding_data['Funds raised per Layoff'])
 ax.get_yaxis().set_major_formatter(FuncFormatter(currency_mil))
 plt.xlabel('Stage of Funding')
@@ -62,7 +62,7 @@ plt.xticks(rotation=45, ha="right", rotation_mode="anchor")
 plt.show()
 
 # Stage of Funding versus average layoffs
-fig = plt.figure(figsize=(10, 5))
+fig = plt.figure(figsize=(10, 5),constrained_layout=True)
 plt.bar(funding_data.index, funding_data['total_laid_off'])
 plt.xlabel('Stage of Funding')
 plt.ylabel('Average Layoffs')
@@ -71,7 +71,7 @@ plt.xticks(rotation=45, ha="right", rotation_mode="anchor")
 plt.show()
 
 # Layoffs versus Funds Raised
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(10, 6),constrained_layout=True)
 plt.scatter(funding_raised_layoffs['funds_raised'], funding_raised_layoffs['total_laid_off'])
 plt.xlabel('Funds Raised')
 plt.ylabel('Layoffs')
@@ -87,7 +87,7 @@ plt.show()
 
 # Sector wise lay-offs in each industry
 sector = data['layoff_processed']['__sector_layoffs']
-fig = plt.figure(figsize=(13, 5))
+fig = plt.figure(figsize=(13, 5),constrained_layout=True)
 # plt.bar(sector.index, sector['number of companies'], width=0.8)
 sector.plot(kind='bar',width = 0.8)
 plt.xlabel('Sector')
@@ -100,7 +100,7 @@ plt.show()
 
 # Number of companies having >20% layoff in each industry
 high_per_industry = data['layoff_processed']['__high_per_industry']
-fig = plt.figure(figsize=(13, 5))
+fig = plt.figure(figsize=(13, 5),constrained_layout=True)
 plt.bar(high_per_industry.index, high_per_industry['number of companies'], width=0.8)
 plt.xlabel('Industry')
 plt.ylabel('Number of Companies')
@@ -111,7 +111,7 @@ plt.show()
 
 # Number of companies having >20% layoff in each country
 high_per_country = data['layoff_processed']['__high_per_country']
-fig = plt.figure(figsize=(13, 5))
+fig = plt.figure(figsize=(13, 5),constrained_layout=True)
 plt.bar(high_per_country.index, high_per_country['number of companies'], width=0.8)
 plt.xlabel('Country')
 plt.ylabel('Number of Companies')
@@ -119,7 +119,7 @@ plt.title('Number of Companies Having 20% or Higher Layoffs by Country')
 plt.xticks(rotation=45, ha="right", rotation_mode="anchor")
 plt.show()
 
-fig, ax = plt.subplots(figsize=(10, 5))
+fig, ax = plt.subplots(figsize=(10, 5),constrained_layout=True)
 
 ax.pie(high_per_country['number of companies'], labels=high_per_country.index, autopct='%1.1f%%', startangle=90)
 plt.show()
@@ -221,7 +221,7 @@ plt.show()
 
 # Total Compensation vs Layoffs Comparison
 total_comp_layoffs = data['salary_processed']['__company_comp_salaries']
-fig,ax = plt.subplots(figsize=(10, 5))
+fig,ax = plt.subplots(figsize=(10, 5),constrained_layout=True)
 total_comp_layoffs.plot.bar(x='company', y='totalyearlycompensation',ax=ax)
 total_comp_layoffs.plot(x='company',y = 'percentage_laid_off',secondary_y =True,ax=ax,color='blue')
 for container in ax.containers:

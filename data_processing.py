@@ -149,18 +149,20 @@ class ProcessData():
 
     @staticmethod
     def __company_comp_salaries(data) -> pd.DataFrame:
-        list_top_companies = ['amazon','google','meta','salesforce','philips','microsoft','uber','dell']
+        list_top_companies = ['amazon','google','salesforce','philips','microsoft','dell','booking.com']
         # Processing Compensation for Top Companies
         companies: pd.DataFrame = data[0][['company', 'totalyearlycompensation']].reset_index()
         companies.company = companies.company.str.lower()
         top_companies = companies.loc[companies['company'].isin(list_top_companies)]
         average_compensation = top_companies.groupby(['company']).mean().astype(int).reset_index()
         # Processing Layoffs for Top Companies
-        company_layoffs : pd.DataFrame = data[1][['company','total_laid_off']]
-        company_layoffs = company_layoffs.groupby('company').sum().sort_values(by='total_laid_off', ascending=False).reset_index()
+        company_layoffs : pd.DataFrame = data[1][['company','percentage_laid_off']]
+        company_layoffs = company_layoffs.loc[company_layoffs['percentage_laid_off']>0].groupby('company').sum().sort_values(by='percentage_laid_off', ascending=False).reset_index()
         company_layoffs.company = company_layoffs.company.str.lower()
-        top_companies_layoffs = company_layoffs.loc[company_layoffs['company'].isin(list_top_companies)]
-        return average_compensation,top_companies_layoffs
+        top_companies_layoffs = company_layoffs.loc[company_layoffs['company'].isin(list_top_companies)].sort_values(by='company',ascending=True)
+        top_companies_layoffs['percentage_laid_off'] = 100*top_companies_layoffs['percentage_laid_off']
+        total_comp_layoffs = pd.merge(top_companies_layoffs, average_compensation,on='company').sort_values(by='totalyearlycompensation',ascending=False)
+        return total_comp_layoffs
     
     @staticmethod
     def __company_funding_stage(data) -> pd.DataFrame:

@@ -25,6 +25,7 @@ class ProcessData():
                                  self.__company_funding_raised, 
                                  self.__high_per_industry, 
                                  self.__high_per_country,
+                                 self.__sector_layoffs,
                                  ]
         self.salary_functions = [self.__company_comp_salaries]
         logger.debug(f'Initialized ProcessData with data directory: {self.data_directory}')
@@ -125,10 +126,20 @@ class ProcessData():
         return industry
     
     @staticmethod
+    def __sector_layoffs(data) -> pd.DataFrame:
+        sector = data.groupby('industry')['total_laid_off'].mean()
+        return sector
+    
+    @staticmethod
     def __country_layoffs(data) -> pd.DataFrame:
         country: pd.DataFrame = data[['country', 'total_laid_off']]
         country = country.groupby('country').sum().sort_values(by='total_laid_off', ascending=False)
         return country
+    
+    @staticmethod
+    def __sector_layoffs(data) -> pd.DataFrame:
+        sector = data.groupby('industry')['total_laid_off'].mean()
+        return sector
 
     @staticmethod
     def __company_layoffs(data) -> pd.DataFrame:

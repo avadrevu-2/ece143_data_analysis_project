@@ -125,10 +125,20 @@ class ProcessData():
         return industry
     
     @staticmethod
+    def __sector_layoffs(data) -> pd.DataFrame:
+        sector = data.groupby('industry')['total_laid_off'].mean()
+        return sector
+    
+    @staticmethod
     def __country_layoffs(data) -> pd.DataFrame:
         country: pd.DataFrame = data[['country', 'total_laid_off']]
         country = country.groupby('country').sum().sort_values(by='total_laid_off', ascending=False)
         return country
+    
+    @staticmethod
+    def __sector_layoffs(data) -> pd.DataFrame:
+        sector = data.groupby('industry')['total_laid_off'].mean()
+        return sector
 
     @staticmethod
     def __company_layoffs(data) -> pd.DataFrame:

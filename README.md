@@ -39,11 +39,13 @@ data_processor = ProcessData(data_directory)
 data = data_processor.process()
 ```
 
-The process() function will first call read_data.py to look through the given data_directory for files ending in .csv. After reading the csv data and converting them to Pandas Dataframes, the process() function will run each of the processing functions for their respective files. The processing functions are defined as static methods in the ProcessData class. 
+The process() function will first call `read_data.py` to look through the given `data_directory` for files ending in `.csv`. After reading the csv data and converting them to Pandas Dataframes, the `process()` function will run each of the processing functions for their respective files. The processing functions are defined as static methods in the `ProcessData` class. 
 
-To add a new processing function, simply declare it as a static method in the ProcessData class with one input parameter which is a Pandas Dataframe. The processing function should then return a Pandas Dataframe with its processed data, which the process() function will add into the output dictionary with the key being the name of the function.
+To add a new processing function, simply declare it as a static method in the `ProcessData` class with one input parameter which is a Pandas Dataframe. The processing function should then return a Pandas Dataframe with its processed data, which the `process()` function will add into the output dictionary with the key being the name of the function.
 
 ### Data Visualization
-The data viz code is stored within the data_viz.ipynb file. The easiest way to run this is with the Visual Studio Code Jyupter Notebook Extension. This allows you to select the kernel as the Virtual Environment that you created, as we've included the Jyupter Notebook Kernel in the requirements.txt so it should already be installed.
+The data viz code is stored within the `data_viz.ipynb` file. The easiest way to run this is with the Visual Studio Code Jupyter Notebook Extension. This allows you to select the kernel as the Virtual Environment that you created, as we've included the Jupyter Notebook Kernel in the `requirements.txt` so it should already be installed.
 
-Simply run the cells! We've declared a ProcessData object as shown above, and we're accessing the processed data through the dictionary that the process() function provides. Then we just setup our matplotlib plots and perform the plotting. To add new plots, you can access the processed data you need by refrencing the dictionary with the key being the name of the processing function. See the data_viz.ipynb file for examples.
+Simply run the cells! We've declared a `ProcessData` object as shown above, and we're accessing the processed data through the dictionary that the `process()` function provides. Then we just setup our matplotlib plots and perform the plotting. To add new plots, you can access the processed data you need by refrencing the dictionary with the key being the name of the processing function. See the `data_viz.ipynb` file for examples.
+
+Alternatively, `data_viz.py` is also available and contains the same plotting scripts from `data_viz.ipynb`. Running this opens each plot in sequence.

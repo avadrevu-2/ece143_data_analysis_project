@@ -1,7 +1,7 @@
 import glob
 import os
-import pandas as pd
 import logging
+import pandas as pd
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
